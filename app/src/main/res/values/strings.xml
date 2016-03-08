@@ -6,4 +6,10 @@
     <string name="cappuccino_description">Espresso, hot milk, and a steamed milk foam</string>
     <string name="filter">Filter</string>
     <string name="filter_description">Highest quality beans roasted and brewed fresh</string>
+    <string name="starbuzz_logo">Starbuzz Logo</string>
+    <string-array name="options">
+        <item>Drinks</item>
+        <item>Food</item>
+        <item>Stores</item>
+    </string-array>
 </resources>
