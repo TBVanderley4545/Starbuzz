@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Starbuzz</string>
+    <string name="latte">Latte</string>
+    <string name="latte_description">A couple of espresso shots with steamed milk</string>
+    <string name="cappuccino">Cappuccino</string>
+    <string name="cappuccino_description">Espresso, hot milk, and a steamed milk foam</string>
+    <string name="filter">Filter</string>
+    <string name="filter_description">Highest quality beans roasted and brewed fresh</string>
+</resources>
