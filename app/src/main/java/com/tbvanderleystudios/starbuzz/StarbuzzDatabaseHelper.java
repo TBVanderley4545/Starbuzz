@@ -50,7 +50,11 @@ public class StarbuzzDatabaseHelper extends SQLiteOpenHelper{
         }
 
         if (oldVerison < 2) {
-            db.execSQL("ALTER TABLE DRINK ADD COLUMN FAVORITE NUMERIC");
+            // The String didn't need to be separated; however, it gives a clearer picture of the
+            // SQL command happening in the code.
+            db.execSQL("ALTER TABLE DRINK"
+                    +"ADD COLUMN"
+                    +"FAVORITE NUMERIC");
         }
 
     }
