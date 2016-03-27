@@ -8,6 +8,7 @@
     <string name="filter_description">Highest quality beans roasted and brewed fresh</string>
     <string name="starbuzz_logo">Starbuzz Logo</string>
     <string name="favorite">Favorite</string>
+    <string name="favorites_title">Your Favorite Drinks</string>
     <string-array name="options">
         <item>Drinks</item>
         <item>Food</item>
