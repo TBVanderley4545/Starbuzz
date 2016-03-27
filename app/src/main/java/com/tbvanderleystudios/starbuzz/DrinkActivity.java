@@ -19,6 +19,7 @@ public class DrinkActivity extends AppCompatActivity {
     private TextView mNameTextView;
     private TextView mDescriptionTextView;
     private CheckBox mFavoriteCheckBox;
+    private SQLiteOpenHelper mStarbuzzDatabaseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +29,13 @@ public class DrinkActivity extends AppCompatActivity {
         // Get the extra from the Intent
         final int drinkNo = (Integer) getIntent().getExtras().get(DrinkCategoryActivity.EXTRA_DRINK_ID_TAG);
 
+
+        // StarbuzzDatabaseHelper is created
+        mStarbuzzDatabaseHelper = new StarbuzzDatabaseHelper(this);
+
         try {
-            // StarbuzzDatabaseHelper is created
-            final SQLiteOpenHelper starbuzzDatabaseHelper = new StarbuzzDatabaseHelper(this);
             // starbuzzDatabaseHelper creates a SQLiteDatabase object called db
-            SQLiteDatabase db = starbuzzDatabaseHelper.getReadableDatabase();
+            SQLiteDatabase db = mStarbuzzDatabaseHelper.getReadableDatabase();
 
             // The Cursor is created by using the SQLiteDatabase query() method
             Cursor cursor = db.query(
@@ -71,30 +74,7 @@ public class DrinkActivity extends AppCompatActivity {
             cursor.close();
             db.close();
 
-            // Allow the CheckBox to update the database when it's clicked.
-            View.OnClickListener listener = new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ContentValues drinkValues = new ContentValues();
-                    drinkValues.put("FAVORITE", mFavoriteCheckBox.isChecked());
 
-                    try {
-                        SQLiteDatabase dbWritable = starbuzzDatabaseHelper.getWritableDatabase();
-
-                        dbWritable.update("DRINK",
-                                drinkValues,
-                                "_id = ?",
-                                new String[] {Integer.toString(drinkNo)});
-
-                        dbWritable.close();
-                    } catch (Exception e) {
-                        Toast toast = Toast.makeText(DrinkActivity.this, "Database unavailable", Toast.LENGTH_LONG);
-                        toast.show();
-                    }
-                }
-            };
-
-            mFavoriteCheckBox.setOnClickListener(listener);
 
         } catch (SQLiteException e) {
             Toast toast = Toast.makeText(this, "The database unavailable", Toast.LENGTH_SHORT);
@@ -102,7 +82,30 @@ public class DrinkActivity extends AppCompatActivity {
         }
 
 
+        // Allow the CheckBox to update the database when it's clicked.
+        View.OnClickListener listener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContentValues drinkValues = new ContentValues();
+                drinkValues.put("FAVORITE", mFavoriteCheckBox.isChecked());
 
+                try {
+                    SQLiteDatabase dbWritable = mStarbuzzDatabaseHelper.getWritableDatabase();
+
+                    dbWritable.update("DRINK",
+                            drinkValues,
+                            "_id = ?",
+                            new String[] {Integer.toString(drinkNo)});
+
+                    dbWritable.close();
+                } catch (Exception e) {
+                    Toast toast = Toast.makeText(DrinkActivity.this, "Database unavailable", Toast.LENGTH_LONG);
+                    toast.show();
+                }
+            }
+        };
+
+        mFavoriteCheckBox.setOnClickListener(listener);
 
     }
 }
