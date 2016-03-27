@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -86,26 +87,53 @@ public class DrinkActivity extends AppCompatActivity {
         View.OnClickListener listener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContentValues drinkValues = new ContentValues();
-                drinkValues.put("FAVORITE", mFavoriteCheckBox.isChecked());
-
-                try {
-                    SQLiteDatabase dbWritable = mStarbuzzDatabaseHelper.getWritableDatabase();
-
-                    dbWritable.update("DRINK",
-                            drinkValues,
-                            "_id = ?",
-                            new String[] {Integer.toString(drinkNo)});
-
-                    dbWritable.close();
-                } catch (Exception e) {
-                    Toast toast = Toast.makeText(DrinkActivity.this, "Database unavailable", Toast.LENGTH_LONG);
-                    toast.show();
-                }
+                new UpdateDrinkTask().execute(drinkNo);
             }
         };
 
         mFavoriteCheckBox.setOnClickListener(listener);
 
+    }
+
+    private class UpdateDrinkTask extends AsyncTask<Integer, Void, Boolean> {
+
+        ContentValues drinkValues;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mFavoriteCheckBox = (CheckBox) findViewById(R.id.favoriteCheckBox);
+            drinkValues = new ContentValues();
+            drinkValues.put("FAVORITE", mFavoriteCheckBox.isChecked());
+        }
+
+        @Override
+        protected Boolean doInBackground(Integer... drinks) {
+            int drinkNo = drinks[0];
+
+            mStarbuzzDatabaseHelper = new StarbuzzDatabaseHelper(DrinkActivity.this);
+
+            try {
+                SQLiteDatabase dbWritable = mStarbuzzDatabaseHelper.getWritableDatabase();
+
+                dbWritable.update("DRINK",
+                        drinkValues,
+                        "_id = ?",
+                        new String[]{Integer.toString(drinkNo)});
+
+                dbWritable.close();
+                return true;
+            } catch (Exception e) {
+                return false;
+            }
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            if(!success) {
+                Toast toast = Toast.makeText(DrinkActivity.this, "Database unavailable", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        }
     }
 }
