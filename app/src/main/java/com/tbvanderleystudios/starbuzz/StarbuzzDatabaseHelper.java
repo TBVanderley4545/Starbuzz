@@ -38,11 +38,10 @@ public class StarbuzzDatabaseHelper extends SQLiteOpenHelper{
     private void updateMyDatabase(SQLiteDatabase db, int oldVerison, int newVersion) {
         if (oldVerison < 1) {
             // The code below used SQL to create an SQLite table called DRINK
-            db.execSQL("CREATE TABLE DRINK"
-                    + "(_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    + "NAME TEXT"
-                    + "DESCRIPTION TEXT"
-                    + "IMAGE_RESOURCE_ID INTEGER);");
+            db.execSQL("CREATE TABLE DRINK (_id INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + "NAME TEXT, "
+            + "DESCRIPTION TEXT, "
+            + "IMAGE_RESOURCE_ID INTEGER);");
 
             insertDrink(db, "Latte", "Espresso and steamed milk", R.drawable.latte);
             insertDrink(db, "Cappucino", "Espresso, hot milk and steamed-milk foam", R.drawable.cappuccino);
@@ -50,11 +49,7 @@ public class StarbuzzDatabaseHelper extends SQLiteOpenHelper{
         }
 
         if (oldVerison < 2) {
-            // The String didn't need to be separated; however, it gives a clearer picture of the
-            // SQL command happening in the code.
-            db.execSQL("ALTER TABLE DRINK"
-                    +"ADD COLUMN"
-                    +"FAVORITE NUMERIC");
+            db.execSQL("ALTER TABLE DRINK ADD COLUMN FAVORITE NUMERIC");
         }
 
     }
