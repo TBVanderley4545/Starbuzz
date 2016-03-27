@@ -29,7 +29,7 @@ public class DrinkActivity extends AppCompatActivity {
             // The Cursor is created by using the SQLiteDatabase query() method
             Cursor cursor = db.query(
                     "DRINK",
-                    new String[]{"NAME, DESCRIPTION, IMAGE_RESOURCE_ID"},
+                    new String[]{"NAME", "DESCRIPTION", "IMAGE_RESOURCE_ID"},
                     "_id = ?",
                     new String[]{Integer.toString(drinkNo)},
                     null,
