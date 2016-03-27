@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity {
     private StarbuzzDatabaseHelper mStarbuzzDatabaseHelper;
     private SQLiteDatabase mDB;
     private Cursor mCursor;
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +37,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
         // Set our ListView to use the onItemClickListener that we created.
-        ListView listView = (ListView) findViewById(R.id.listOptions);
-        listView.setOnItemClickListener(itemClickListener);
+        mListView = (ListView) findViewById(R.id.listOptions);
+        mListView.setOnItemClickListener(itemClickListener);
 
 
         // Get a reference to the favorite ListView
@@ -91,6 +92,35 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         mCursor.close();
         mDB.close();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        try {
+            mStarbuzzDatabaseHelper = new StarbuzzDatabaseHelper(this);
+            mDB = mStarbuzzDatabaseHelper.getReadableDatabase();
+            // Create a new Cursor
+            Cursor newCursor = mDB.query(
+                    "DRINK",
+                    new String[] {"_id", "NAME"},
+                    "FAVORITE = ?",
+                    new String[] {Integer.toString(1)},
+                    null,
+                    null,
+                    null
+            );
+
+            mListView = (ListView) findViewById(R.id.listFavorites);
+
+            CursorAdapter adapter = (CursorAdapter) mListView.getAdapter();
+            adapter.changeCursor(newCursor);
+            mCursor = newCursor;
+        } catch (Exception e) {
+            Toast toast = Toast.makeText(this, "Database unavailable", Toast.LENGTH_LONG);
+            toast.show();
+        }
     }
 }
 
