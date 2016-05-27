@@ -85,6 +85,8 @@ public class MainActivity extends AppCompatActivity {
             };
 
         favoritesListView.setOnItemClickListener(onItemClickListener);
+
+        Toast.makeText(this, "Test", Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -28,7 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/favorites_title"/>
+        android:text="@string/favorites_title"
+        android:textColor="@android:color/black"/>
 
     <ListView
         android:id="@+id/listFavorites"
